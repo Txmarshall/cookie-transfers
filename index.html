@@ -579,7 +579,7 @@
         // Configuration - UPDATE THESE
         const CONFIG = {
             // Google Apps Script Web App URL (deploy your script and paste URL here)
-            GOOGLE_SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
+            GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbze8wCGXr4yQ_ZKg_-7avQEGlPYvxrM5hELW9iexDyRO8CWESIzTpvzDh4XqMh3xQ1W/exec',
             // Packages per case (standard is 12)
             PKGS_PER_CASE: 12
         };
@@ -666,7 +666,7 @@
 
             try {
                 // Check if Google Script URL is configured
-                if (CONFIG.GOOGLE_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbze8wCGXr4yQ_ZKg_-7avQEGlPYvxrM5hELW9iexDyRO8CWESIzTpvzDh4XqMh3xQ1W/exec') {
+                if (CONFIG.GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
                     // Demo mode - just show success
                     console.log('Form data:', data);
                     showToast('Demo: Data logged to console', 'success');
