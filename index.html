@@ -409,6 +409,12 @@
             <!-- Transfer Info -->
             <div class="card">
                 <div class="card-title">Transfer Info</div>
+                <div class="form-row single">
+                    <div class="form-group">
+                        <label>Troop # / Name</label>
+                        <input type="text" id="troopName" placeholder="Troop 1234 / Smith" required>
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Date</label>
@@ -630,6 +636,7 @@
 
             return {
                 timestamp: new Date().toISOString(),
+                troopName: document.getElementById('troopName').value,
                 date: document.getElementById('transferDate').value,
                 serviceUnit: document.getElementById('serviceUnit').value,
                 fromName: document.getElementById('fromName').value,
