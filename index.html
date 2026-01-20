@@ -294,15 +294,15 @@
             transform: translateX(24px);
         }
 
-        /* SMS Fields */
-        .sms-fields {
+        /* Email Fields */
+        .email-fields {
             display: none;
             margin-top: 12px;
             padding-top: 12px;
             border-top: 1px dashed var(--border);
         }
 
-        .sms-fields.visible {
+        .email-fields.visible {
             display: block;
         }
 
@@ -533,24 +533,24 @@
                 
                 <div class="toggle-row">
                     <div>
-                        <div class="toggle-label">Send SMS Receipt</div>
-                        <div class="toggle-sublabel">Text receipt to both parties</div>
+                        <div class="toggle-label">Send Email Receipt</div>
+                        <div class="toggle-sublabel">Email receipt to both parties</div>
                     </div>
                     <label class="toggle">
-                        <input type="checkbox" id="smsToggle">
+                        <input type="checkbox" id="emailToggle">
                         <span class="toggle-slider"></span>
                     </label>
                 </div>
                 
-                <div class="sms-fields" id="smsFields">
+                <div class="email-fields" id="emailFields">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>From Phone</label>
-                            <input type="tel" id="fromPhone" placeholder="(555) 123-4567" inputmode="tel">
+                            <label>Giver's Email</label>
+                            <input type="email" id="fromEmail" placeholder="jane@email.com" inputmode="email">
                         </div>
                         <div class="form-group">
-                            <label>To Phone</label>
-                            <input type="tel" id="toPhone" placeholder="(555) 123-4567" inputmode="tel">
+                            <label>Receiver's Email</label>
+                            <input type="email" id="toEmail" placeholder="mary@email.com" inputmode="email">
                         </div>
                     </div>
                 </div>
@@ -587,9 +587,9 @@
         // Set today's date as default
         document.getElementById('transferDate').valueAsDate = new Date();
 
-        // SMS toggle
-        document.getElementById('smsToggle').addEventListener('change', function() {
-            document.getElementById('smsFields').classList.toggle('visible', this.checked);
+        // Email toggle
+        document.getElementById('emailToggle').addEventListener('change', function() {
+            document.getElementById('emailFields').classList.toggle('visible', this.checked);
         });
 
         // Auto-calculate totals
@@ -647,9 +647,9 @@
                 totalCases: parseInt(document.getElementById('totalCases').textContent),
                 totalPkgs: parseInt(document.getElementById('totalPkgs').textContent),
                 moneyAmount: parseFloat(document.getElementById('moneyAmount').value) || 0,
-                sendSms: document.getElementById('smsToggle').checked,
-                fromPhone: document.getElementById('fromPhone').value,
-                toPhone: document.getElementById('toPhone').value,
+                sendEmail: document.getElementById('emailToggle').checked,
+                fromEmail: document.getElementById('fromEmail').value,
+                toEmail: document.getElementById('toEmail').value,
                 notes: document.getElementById('notes').value
             };
         }
