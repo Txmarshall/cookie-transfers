@@ -8,7 +8,7 @@
     <title>GS Cookie Transfer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
     <style>
         :root {
             --gs-green: #00ae58;
@@ -21,6 +21,7 @@
             --border: #e2e4e8;
             --shadow: 0 2px 8px rgba(0,0,0,0.08);
             --radius: 12px;
+            --error: #d32f2f;
         }
 
         * {
@@ -42,27 +43,52 @@
             max-width: 480px;
             margin: 0 auto;
             padding: 16px;
-            padding-bottom: 100px;
+            padding-bottom: 120px;
         }
 
         header {
             text-align: center;
-            padding: 20px 0;
+            padding: 16px 0;
             border-bottom: 2px solid var(--gs-green);
             margin-bottom: 20px;
+            position: relative;
         }
 
         header h1 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: var(--gs-green-dark);
             letter-spacing: -0.5px;
         }
 
         header p {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
             margin-top: 4px;
+        }
+
+        .header-btns {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gs-green-light);
+            border: 2px solid var(--gs-green);
+            color: var(--gs-green-dark);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .card {
@@ -104,10 +130,6 @@
             grid-template-columns: 1fr;
         }
 
-        .form-row.triple {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-
         .form-group {
             display: flex;
             flex-direction: column;
@@ -128,6 +150,15 @@
             font-family: inherit;
             background: #fff;
             transition: border-color 0.2s, box-shadow 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .form-group select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5a6e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
         }
 
         .form-group input:focus, .form-group select:focus {
@@ -147,19 +178,100 @@
             margin: 0;
         }
 
+        /* Combobox (select with manual entry) */
+        .combobox {
+            position: relative;
+        }
+
+        .combobox input {
+            width: 100%;
+        }
+
+        .combobox-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1.5px solid var(--gs-green);
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .combobox-dropdown.show {
+            display: block;
+        }
+
+        .combobox-option {
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .combobox-option:hover, .combobox-option.highlighted {
+            background: var(--gs-green-light);
+        }
+
+        .combobox-option.new-entry {
+            color: var(--gs-green-dark);
+            font-style: italic;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Transfer Type Selector */
+        .transfer-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .transfer-type-btn {
+            padding: 12px 8px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .transfer-type-btn:hover {
+            border-color: var(--gs-green);
+        }
+
+        .transfer-type-btn.active {
+            border-color: var(--gs-green);
+            background: var(--gs-green-light);
+            color: var(--gs-green-dark);
+        }
+
+        /* Party Sections */
+        .party-section {
+            background: var(--bg-main);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
         /* Cookie Grid */
         .cookie-grid {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .cookie-row {
             display: grid;
-            grid-template-columns: 1fr 70px 70px;
+            grid-template-columns: 1fr 80px;
             gap: 8px;
             align-items: center;
-            padding: 10px 12px;
+            padding: 8px 12px;
             background: var(--bg-main);
             border-radius: 8px;
         }
@@ -170,7 +282,6 @@
             font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             padding: 8px 12px;
         }
 
@@ -229,81 +340,51 @@
             font-weight: 600;
         }
 
-        /* Toggle for money receipt */
-        .toggle-row {
+        /* Signature Section */
+        .signature-section {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .signature-preview {
+            min-height: 60px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-top: 1px solid var(--border);
+            justify-content: center;
+            margin: 12px 0;
+            background: #fafafa;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .signature-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .signature-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
             margin-top: 12px;
+            padding: 12px;
+            background: var(--gs-green-light);
+            border-radius: 8px;
         }
 
-        .toggle-label {
-            font-size: 0.9rem;
-            font-weight: 500;
+        .signature-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: var(--gs-green);
         }
 
-        .toggle-sublabel {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .toggle {
-            position: relative;
-            width: 52px;
-            height: 28px;
-        }
-
-        .toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: 0.3s;
-            border-radius: 28px;
-        }
-
-        .toggle-slider::before {
-            position: absolute;
-            content: '';
-            height: 22px;
-            width: 22px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.3s;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .toggle input:checked + .toggle-slider {
-            background-color: var(--gs-green);
-        }
-
-        .toggle input:checked + .toggle-slider::before {
-            transform: translateX(24px);
-        }
-
-        /* Email Fields */
-        .email-fields {
-            display: none;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px dashed var(--border);
-        }
-
-        .email-fields.visible {
-            display: block;
+        .signature-checkbox label {
+            font-size: 0.85rem;
+            line-height: 1.4;
         }
 
         /* Submit Button */
@@ -337,7 +418,6 @@
 
         .submit-btn:active {
             transform: scale(0.98);
-            box-shadow: 0 2px 8px rgba(0, 174, 88, 0.3);
         }
 
         .submit-btn:disabled {
@@ -345,7 +425,7 @@
             box-shadow: none;
         }
 
-        /* Toast notification */
+        /* Toast */
         .toast {
             position: fixed;
             top: 20px;
@@ -365,299 +445,915 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        .toast.success {
-            background: var(--gs-green-dark);
+        .toast.success { background: var(--gs-green-dark); }
+        .toast.error { background: var(--error); }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .toast.error {
-            background: #d32f2f;
-        }
-
-        /* Quick increment buttons */
-        .quick-btns {
+        .modal-overlay.show {
             display: flex;
-            gap: 6px;
-            margin-top: 8px;
         }
 
-        .quick-btn {
-            flex: 1;
-            padding: 8px;
-            background: var(--gs-green-light);
-            border: 1px solid var(--gs-green);
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
+        .modal {
+            background: white;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.2rem;
             color: var(--gs-green-dark);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--bg-main);
+            border-radius: 50%;
+            font-size: 1.2rem;
             cursor: pointer;
         }
 
-        .quick-btn:active {
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-body h3 {
+            font-size: 1rem;
+            margin: 20px 0 10px 0;
+            color: var(--gs-green-dark);
+        }
+
+        .modal-body h3:first-child { margin-top: 0; }
+
+        .modal-body p, .modal-body li {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .modal-body ol { padding-left: 20px; }
+        .modal-body li { margin-bottom: 8px; }
+
+        .modal-body code {
+            background: var(--bg-main);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Setup Screen */
+        .setup-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .setup-screen h1 {
+            font-size: 1.8rem;
+            color: var(--gs-green-dark);
+            margin-bottom: 8px;
+        }
+
+        .setup-screen p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .setup-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow);
+        }
+
+        .setup-card .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .setup-card .form-group label {
+            font-size: 0.85rem;
+        }
+
+        .setup-btn {
+            width: 100%;
+            padding: 14px;
             background: var(--gs-green);
             color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .setup-btn:disabled {
+            background: #ccc;
+        }
+
+        .setup-help {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 16px;
+        }
+
+        .setup-help a {
+            color: var(--gs-green-dark);
+        }
+
+        /* Coffee button */
+        .coffee-section {
+            text-align: center;
+            padding: 20px 0 10px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        .coffee-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #FFDD00;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gs-green);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden { display: none !important; }
+
+        /* Refresh roster button */
+        .refresh-btn {
+            background: none;
+            border: none;
+            color: var(--gs-green);
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 4px 0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Cookie Transfer</h1>
-            <p>Money and/or Cookie Receipt</p>
-        </header>
-
-        <form id="transferForm">
-            <!-- Transfer Info -->
-            <div class="card">
-                <div class="card-title">Transfer Info</div>
-                <div class="form-row single">
-                    <div class="form-group">
-                        <label>Troop # / Name</label>
-                        <input type="text" id="troopName" placeholder="Troop 1234 / Smith" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Date</label>
-                        <input type="date" id="transferDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Service Unit</label>
-                        <input type="text" id="serviceUnit" placeholder="S.U.">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>From (Name)</label>
-                        <input type="text" id="fromName" placeholder="Received from" required>
-                    </div>
-                    <div class="form-group">
-                        <label>From Troop #</label>
-                        <input type="text" id="fromTroop" placeholder="Troop #">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>To (Name)</label>
-                        <input type="text" id="toName" placeholder="Received by" required>
-                    </div>
-                    <div class="form-group">
-                        <label>To Troop #</label>
-                        <input type="text" id="toTroop" placeholder="Troop #">
-                    </div>
-                </div>
+    <!-- Setup Screen -->
+    <div id="setupScreen" class="setup-screen">
+        <h1>🍪 Cookie Transfer</h1>
+        <p>Connect your Google Sheet to get started</p>
+        
+        <div class="setup-card">
+            <div class="form-group">
+                <label>Google Sheet ID or URL</label>
+                <input type="text" id="setupSheetInput" placeholder="Paste your Sheet ID or URL">
             </div>
+            <button class="setup-btn" onclick="saveSetup()" id="setupBtn">Connect Sheet</button>
+            
+            <div class="setup-help">
+                <p><strong>How to get your Sheet ID:</strong></p>
+                <p>Create a new Google Sheet, then copy the ID from the URL:<br>
+                <code>docs.google.com/spreadsheets/d/<strong>THIS_PART</strong>/edit</code></p>
+                <p style="margin-top: 12px;">⚠️ Share your Sheet with:<br>
+                <strong id="shareEmail">terrel@riojas.io</strong></p>
+            </div>
+        </div>
+    </div>
 
-            <!-- Cookie Inventory -->
-            <div class="card">
-                <div class="card-title">Cookie Inventory</div>
-                <div class="cookie-grid">
-                    <div class="cookie-row header">
-                        <span>Variety</span>
-                        <span style="text-align:center">Cases</span>
-                        <span style="text-align:center">Pkgs</span>
-                    </div>
-                    
-                    <div class="cookie-row" data-cookie="adventurefuls">
-                        <span class="cookie-name">Adventurefuls</span>
-                        <input type="number" class="cases" min="0" placeholder="0" inputmode="numeric">
-                        <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
-                    </div>
-                    
-                    <div class="cookie-row" data-cookie="exploremores">
-                        <span class="cookie-name">Exploremores</span>
-                        <input type="number" class="cases" min="0" placeholder="0" inputmode="numeric">
-                        <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
-                    </div>
-                    
-                    <div class="cookie-row" data-cookie="lemonades">
-                        <span class="cookie-name">Lemonades</span>
-                        <input type="number" class="cases" min="0" placeholder="0" inputmode="numeric">
-                        <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
-                    </div>
-                    
-                    <div class="cookie-row" data-cookie="trefoils">
-                        <span class="cookie-name">Trefoils</span>
-                        <input type="number" class="cases" min="0" placeholder="0" inputmode="numeric">
-                        <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
-                    </div>
-                    
-                    <div class="cookie-row" data-cookie="thinmints">
-                        <span class="cookie-name">Thin Mints</span>
-                        <input type="number" class="cases" min="0" placeholder="0" inputmode="numeric">
-                        <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
-                    </div>
-                    
-                    <div class="cookie-row" data-cookie="pbpatties">
-                        <span class="cookie-name">PB Patties</span>
-                        <input type="number" class="cases" min="0" placeholder="0" inputmode="numeric">
-                        <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
-                    </div>
-                    
-                    <div class="cookie-row" data-cookie="carameldelites">
-                        <span class="cookie-name">Caramel deLites</span>
-                        <input type="number" class="cases" min="0" placeholder="0" inputmode="numeric">
-                        <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
-                    </div>
-                    
-                    <div class="cookie-row" data-cookie="pbsandwich">
-                        <span class="cookie-name">PB Sandwich</span>
-                        <input type="number" class="cases" min="0" placeholder="0" inputmode="numeric">
-                        <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
-                    </div>
-                    
-                    <div class="cookie-row" data-cookie="caramelchip">
-                        <span class="cookie-name">Caramel Chip GF</span>
-                        <input type="number" class="cases" min="0" placeholder="0" inputmode="numeric">
-                        <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
-                    </div>
-                    
-                    <div class="cookie-row total">
-                        <span class="cookie-name">TOTAL</span>
-                        <span class="total-value" id="totalCases">0</span>
-                        <span class="total-value" id="totalPkgs">0</span>
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <div class="container">
+            <header>
+                <h1>🍪 Cookie Transfer</h1>
+                <p>Girl Scout Cookie Receipt</p>
+                <div class="header-btns">
+                    <button class="icon-btn" onclick="showHelp()" title="Help">?</button>
+                    <button class="icon-btn" onclick="showSettings()" title="Settings">⚙</button>
+                </div>
+            </header>
+
+            <div id="loadingState" class="loading">Loading roster</div>
+
+            <form id="transferForm" class="hidden">
+                <!-- Transfer Type -->
+                <div class="card">
+                    <div class="card-title">Transfer Type</div>
+                    <div class="transfer-type-grid">
+                        <button type="button" class="transfer-type-btn active" data-type="Troop to Girl">Troop → Girl</button>
+                        <button type="button" class="transfer-type-btn" data-type="Girl to Troop">Girl → Troop</button>
+                        <button type="button" class="transfer-type-btn" data-type="Troop to Troop">Troop → Troop</button>
+                        <button type="button" class="transfer-type-btn" data-type="Girl to Girl">Girl → Girl</button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Money Section -->
-            <div class="card">
-                <div class="card-title">Money</div>
-                <div class="form-row single">
-                    <div class="form-group">
-                        <label>Amount Received</label>
-                        <div class="money-input-wrapper">
-                            <input type="number" id="moneyAmount" min="0" step="0.01" placeholder="0.00" inputmode="decimal">
+                <!-- From Section -->
+                <div class="card">
+                    <div class="card-title">From</div>
+                    <div class="party-section">
+                        <div class="form-row single" id="fromTroopRow">
+                            <div class="form-group combobox">
+                                <label>Troop Number</label>
+                                <input type="text" id="fromTroop" placeholder="Type or select..." autocomplete="off" required>
+                                <div class="combobox-dropdown" id="fromTroopDropdown"></div>
+                            </div>
+                        </div>
+                        <div class="form-row single hidden" id="fromGirlRow">
+                            <div class="form-group combobox">
+                                <label>Girl Name (must match SmartCookie)</label>
+                                <input type="text" id="fromGirl" placeholder="Type or select..." autocomplete="off">
+                                <div class="combobox-dropdown" id="fromGirlDropdown"></div>
+                            </div>
+                        </div>
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input type="email" id="fromEmail" placeholder="sender@email.com" inputmode="email" required>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="toggle-row">
-                    <div>
-                        <div class="toggle-label">Send Email Receipt</div>
-                        <div class="toggle-sublabel">Email receipt to both parties</div>
+
+                <!-- To Section -->
+                <div class="card">
+                    <div class="card-title">To (Recipient)</div>
+                    <div class="party-section">
+                        <div class="form-row single hidden" id="toTroopRow">
+                            <div class="form-group combobox">
+                                <label>Troop Number</label>
+                                <input type="text" id="toTroop" placeholder="Type or select..." autocomplete="off">
+                                <div class="combobox-dropdown" id="toTroopDropdown"></div>
+                            </div>
+                        </div>
+                        <div class="form-row single" id="toGirlRow">
+                            <div class="form-group combobox">
+                                <label>Girl Name (must match SmartCookie)</label>
+                                <input type="text" id="toGirl" placeholder="Type or select..." autocomplete="off">
+                                <div class="combobox-dropdown" id="toGirlDropdown"></div>
+                            </div>
+                        </div>
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <label>Recipient Email *</label>
+                                <input type="email" id="toEmail" placeholder="recipient@email.com" inputmode="email" required>
+                            </div>
+                        </div>
                     </div>
-                    <label class="toggle">
-                        <input type="checkbox" id="emailToggle">
-                        <span class="toggle-slider"></span>
-                    </label>
                 </div>
-                
-                <div class="email-fields" id="emailFields">
-                    <div class="form-row">
+
+                <!-- Cookie Inventory -->
+                <div class="card">
+                    <div class="card-title">Cookie Packages</div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">
+                        Enter total packages (12 packages = 1 case)
+                    </p>
+                    <div class="cookie-grid">
+                        <div class="cookie-row header">
+                            <span>Variety</span>
+                            <span style="text-align:center">Pkgs</span>
+                        </div>
+                        
+                        <div class="cookie-row" data-cookie="adventurefuls">
+                            <span class="cookie-name">Adventurefuls</span>
+                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                        </div>
+                        
+                        <div class="cookie-row" data-cookie="exploremores">
+                            <span class="cookie-name">Exploremores</span>
+                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                        </div>
+                        
+                        <div class="cookie-row" data-cookie="lemonades">
+                            <span class="cookie-name">Lemonades</span>
+                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                        </div>
+                        
+                        <div class="cookie-row" data-cookie="trefoils">
+                            <span class="cookie-name">Trefoils</span>
+                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                        </div>
+                        
+                        <div class="cookie-row" data-cookie="thinmints">
+                            <span class="cookie-name">Thin Mints</span>
+                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                        </div>
+                        
+                        <div class="cookie-row" data-cookie="pbpatties">
+                            <span class="cookie-name">PB Patties</span>
+                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                        </div>
+                        
+                        <div class="cookie-row" data-cookie="carameldelites">
+                            <span class="cookie-name">Caramel deLites</span>
+                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                        </div>
+                        
+                        <div class="cookie-row" data-cookie="pbsandwich">
+                            <span class="cookie-name">PB Sandwich</span>
+                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                        </div>
+                        
+                        <div class="cookie-row" data-cookie="caramelchip">
+                            <span class="cookie-name">Caramel Chip GF</span>
+                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                        </div>
+                        
+                        <div class="cookie-row total">
+                            <span class="cookie-name">TOTAL</span>
+                            <span class="total-value" id="totalPkgs">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Money Section -->
+                <div class="card">
+                    <div class="card-title">Money (if applicable)</div>
+                    <div class="form-row single">
                         <div class="form-group">
-                            <label>Giver's Email</label>
-                            <input type="email" id="fromEmail" placeholder="jane@email.com" inputmode="email">
+                            <label>Amount Received</label>
+                            <div class="money-input-wrapper">
+                                <input type="number" id="moneyAmount" min="0" step="0.01" placeholder="0.00" inputmode="decimal">
+                            </div>
                         </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px;">
+                        📧 Email receipts are sent automatically to both parties.
+                    </p>
+                </div>
+
+                <!-- Signature Section -->
+                <div class="card">
+                    <div class="card-title">Recipient Signature</div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">
+                        The recipient must sign to acknowledge receipt and assume financial responsibility.
+                    </p>
+                    <div class="signature-section">
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <label>Type recipient's full name</label>
+                                <input type="text" id="signatureName" placeholder="Jane Smith" required>
+                            </div>
+                        </div>
+                        <div class="signature-preview">
+                            <span class="signature-text" id="signaturePreview">Signature Preview</span>
+                        </div>
+                        <div class="signature-checkbox">
+                            <input type="checkbox" id="signatureConsent" required>
+                            <label for="signatureConsent">
+                                I, the recipient, authorize this electronic signature and acknowledge receipt of the items listed above and accept financial responsibility.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="card">
+                    <div class="card-title">Notes</div>
+                    <div class="form-row single">
                         <div class="form-group">
-                            <label>Receiver's Email</label>
-                            <input type="email" id="toEmail" placeholder="mary@email.com" inputmode="email">
+                            <label>Additional Notes (optional)</label>
+                            <input type="text" id="notes" placeholder="Booth sale, door-to-door, etc.">
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Notes -->
-            <div class="card">
-                <div class="card-title">Notes</div>
-                <div class="form-row single">
-                    <div class="form-group">
-                        <label>Additional Notes (optional)</label>
-                        <input type="text" id="notes" placeholder="Booth sale, door-to-door, etc.">
+                    <div class="coffee-section">
+                        <a href="https://buymeacoffee.com/yourusername" target="_blank" class="coffee-btn">
+                            ☕ Buy Me a Coffee
+                        </a>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px;">
+                            Like this app? Support its development!
+                        </p>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
 
-        <div class="submit-section">
-            <button type="submit" class="submit-btn" form="transferForm">Submit Transfer</button>
+            <div class="submit-section">
+                <button type="submit" class="submit-btn" form="transferForm">Submit Transfer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>📖 How to Use</h2>
+                <button class="modal-close" onclick="hideHelp()">✕</button>
+            </div>
+            <div class="modal-body">
+                <h3>What is this?</h3>
+                <p>This app helps Girl Scout troop leaders track cookie transfers. It creates digital receipts, logs transfers to your Google Sheet, and emails receipts automatically.</p>
+
+                <h3>Transfer Types</h3>
+                <p><strong>Troop → Girl:</strong> Distributing cookies to a girl for selling.</p>
+                <p><strong>Girl → Troop:</strong> Returning unsold cookies.</p>
+                <p><strong>Troop → Troop:</strong> Transferring between troops.</p>
+                <p><strong>Girl → Girl:</strong> One girl transfers to another.</p>
+
+                <h3>Auto-Save Roster</h3>
+                <p>New girls and troops are automatically saved to your roster when you submit a transfer. Next time, they'll appear in the dropdown!</p>
+
+                <h3>Signature</h3>
+                <p>The recipient types their name and checks the consent box to create a digital record of receipt.</p>
+
+                <h3>Girl Names</h3>
+                <p>⚠️ Names should match SmartCookie exactly for the automation feature (coming soon).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>⚙️ Settings</h2>
+                <button class="modal-close" onclick="hideSettings()">✕</button>
+            </div>
+            <div class="modal-body">
+                <h3>Connected Sheet</h3>
+                <p id="currentSheetId" style="word-break: break-all; font-family: monospace; background: var(--bg-main); padding: 8px; border-radius: 6px;"></p>
+                
+                <button class="refresh-btn" onclick="refreshRoster()" style="margin-top: 12px;">↻ Refresh Roster Data</button>
+                
+                <h3>Change Sheet</h3>
+                <div class="form-group">
+                    <label>New Sheet ID or URL</label>
+                    <input type="text" id="newSheetInput" placeholder="Paste new Sheet ID or URL">
+                </div>
+                <button class="setup-btn" onclick="changeSheet()" style="margin-top: 8px;">Update Sheet</button>
+                
+                <h3 style="margin-top: 24px; color: var(--error);">Danger Zone</h3>
+                <button class="setup-btn" onclick="disconnectSheet()" style="background: var(--error);">Disconnect Sheet</button>
+            </div>
         </div>
     </div>
 
     <div class="toast" id="toast"></div>
 
     <script>
-        // Configuration - UPDATE THESE
+        // ============================================
+        // CONFIGURATION
+        // ============================================
         const CONFIG = {
-            // Google Apps Script Web App URL (deploy your script and paste URL here)
-            GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbze8wCGXr4yQ_ZKg_-7avQEGlPYvxrM5hELW9iexDyRO8CWESIzTpvzDh4XqMh3xQ1W/exec',
-            // Packages per case (standard is 12)
-            PKGS_PER_CASE: 12
+            // Google Apps Script Web App URL (hosted by you)
+            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyrmFfJflLcGuaHtpLeC9WomxngKM6Obai1kqBnODTAJlvEqRvOEbYQUxBKeKdjZOOq/exec',
+            
+            // Email for sharing instructions
+            SHARE_EMAIL: 'terrel.culp@gmail.com'
         };
 
-        // Set today's date as default
-        document.getElementById('transferDate').valueAsDate = new Date();
+        // ============================================
+        // STATE
+        // ============================================
+        let sheetId = null;
+        let troops = [];
+        let girls = [];
+        let currentTransferType = 'Troop to Girl';
 
-        // Email toggle
-        document.getElementById('emailToggle').addEventListener('change', function() {
-            document.getElementById('emailFields').classList.toggle('visible', this.checked);
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update share email in setup screen
+            document.getElementById('shareEmail').textContent = CONFIG.SHARE_EMAIL;
+            
+            // Check for saved sheet ID
+            sheetId = localStorage.getItem('gs_cookie_sheet_id');
+            
+            if (sheetId) {
+                showMainApp();
+            } else {
+                showSetupScreen();
+            }
         });
 
-        // Auto-calculate totals
-        function calculateTotals() {
-            let totalCases = 0;
-            let totalPkgs = 0;
+        function showSetupScreen() {
+            document.getElementById('setupScreen').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
 
-            document.querySelectorAll('.cookie-row[data-cookie]').forEach(row => {
-                const cases = parseInt(row.querySelector('.cases').value) || 0;
-                const pkgs = parseInt(row.querySelector('.pkgs').value) || 0;
-                totalCases += cases;
-                totalPkgs += pkgs + (cases * CONFIG.PKGS_PER_CASE);
+        function showMainApp() {
+            document.getElementById('setupScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            loadRoster();
+            setupEventListeners();
+        }
+
+        // ============================================
+        // SETUP / SETTINGS
+        // ============================================
+        function extractSheetId(input) {
+            // Handle full URL or just ID
+            const match = input.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            return match ? match[1] : input.trim();
+        }
+
+        async function saveSetup() {
+            const input = document.getElementById('setupSheetInput').value;
+            if (!input) {
+                showToast('Please enter a Sheet ID or URL', 'error');
+                return;
+            }
+            
+            const id = extractSheetId(input);
+            const btn = document.getElementById('setupBtn');
+            btn.disabled = true;
+            btn.textContent = 'Connecting...';
+            
+            try {
+                // Test connection
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?action=initialize&sheetId=${id}`);
+                const data = await response.json();
+                
+                if (data.status === 'ok') {
+                    localStorage.setItem('gs_cookie_sheet_id', id);
+                    sheetId = id;
+                    showToast('Connected successfully!', 'success');
+                    showMainApp();
+                } else {
+                    throw new Error(data.message || 'Connection failed');
+                }
+            } catch (error) {
+                console.error('Setup error:', error);
+                showToast('Connection failed. Make sure the sheet is shared.', 'error');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = 'Connect Sheet';
+        }
+
+        function showSettings() {
+            document.getElementById('currentSheetId').textContent = sheetId;
+            document.getElementById('settingsModal').classList.add('show');
+        }
+
+        function hideSettings() {
+            document.getElementById('settingsModal').classList.remove('show');
+        }
+
+        async function changeSheet() {
+            const input = document.getElementById('newSheetInput').value;
+            if (!input) return;
+            
+            const id = extractSheetId(input);
+            
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?action=initialize&sheetId=${id}`);
+                const data = await response.json();
+                
+                if (data.status === 'ok') {
+                    localStorage.setItem('gs_cookie_sheet_id', id);
+                    sheetId = id;
+                    showToast('Sheet updated!', 'success');
+                    hideSettings();
+                    loadRoster();
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                showToast('Failed to connect to new sheet', 'error');
+            }
+        }
+
+        function disconnectSheet() {
+            if (confirm('Are you sure? This will remove your sheet connection.')) {
+                localStorage.removeItem('gs_cookie_sheet_id');
+                sheetId = null;
+                hideSettings();
+                showSetupScreen();
+            }
+        }
+
+        // ============================================
+        // ROSTER LOADING
+        // ============================================
+        async function loadRoster() {
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('transferForm').classList.add('hidden');
+            
+            try {
+                if (CONFIG.SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                    // Demo mode
+                    troops = [
+                        { number: '26306', name: 'Demo Troop', email: 'troop@example.com' }
+                    ];
+                    girls = [
+                        { name: 'Scarlett Riojas', troop: '26306', email: 'scarlett@example.com' },
+                        { name: 'Emma Smith', troop: '26306', email: 'emma@example.com' }
+                    ];
+                } else {
+                    const response = await fetch(`${CONFIG.SCRIPT_URL}?action=getRoster&sheetId=${sheetId}`);
+                    const data = await response.json();
+                    
+                    if (data.status === 'ok') {
+                        troops = data.roster.troops || [];
+                        girls = data.roster.girls || [];
+                    } else {
+                        throw new Error(data.message);
+                    }
+                }
+                
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('transferForm').classList.remove('hidden');
+                updateFormForTransferType();
+                
+            } catch (error) {
+                console.error('Load roster error:', error);
+                document.getElementById('loadingState').textContent = 'Error loading data. Check settings.';
+            }
+        }
+
+        async function refreshRoster() {
+            showToast('Refreshing...', 'success');
+            await loadRoster();
+            showToast('Roster refreshed!', 'success');
+        }
+
+        // ============================================
+        // COMBOBOX (Type-ahead dropdown)
+        // ============================================
+        function setupCombobox(inputId, dropdownId, getOptions, onSelect) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            
+            input.addEventListener('focus', () => {
+                showDropdown(inputId, dropdownId, getOptions, onSelect);
+            });
+            
+            input.addEventListener('input', () => {
+                showDropdown(inputId, dropdownId, getOptions, onSelect);
+            });
+            
+            input.addEventListener('blur', () => {
+                // Delay to allow click on dropdown
+                setTimeout(() => dropdown.classList.remove('show'), 200);
+            });
+        }
+
+        function showDropdown(inputId, dropdownId, getOptions, onSelect) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            const value = input.value.toLowerCase();
+            const options = getOptions();
+            
+            let html = '';
+            const filtered = options.filter(opt => 
+                opt.label.toLowerCase().includes(value)
+            );
+            
+            filtered.forEach(opt => {
+                html += `<div class="combobox-option" data-value="${opt.value}" data-email="${opt.email || ''}">${opt.label}</div>`;
+            });
+            
+            // Add "new entry" option if typing something not in list
+            if (value && !options.some(opt => opt.value.toLowerCase() === value)) {
+                html += `<div class="combobox-option new-entry" data-value="${input.value}" data-email="">+ Add "${input.value}"</div>`;
+            }
+            
+            dropdown.innerHTML = html || '<div class="combobox-option" style="color: #999;">No matches</div>';
+            dropdown.classList.add('show');
+            
+            // Click handlers
+            dropdown.querySelectorAll('.combobox-option').forEach(opt => {
+                opt.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    input.value = opt.dataset.value;
+                    if (onSelect) onSelect(opt.dataset.value, opt.dataset.email);
+                    dropdown.classList.remove('show');
+                });
+            });
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            // Transfer type buttons
+            document.querySelectorAll('.transfer-type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.transfer-type-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentTransferType = this.dataset.type;
+                    updateFormForTransferType();
+                });
             });
 
-            document.getElementById('totalCases').textContent = totalCases;
-            document.getElementById('totalPkgs').textContent = totalPkgs;
+            // Comboboxes
+            setupCombobox('fromTroop', 'fromTroopDropdown', 
+                () => troops.map(t => ({ value: t.number, label: `${t.number}${t.name ? ' - ' + t.name : ''}`, email: t.email })),
+                (value, email) => {
+                    if (email) document.getElementById('fromEmail').value = email;
+                    // If Troop to Girl, filter girls for this troop
+                    if (currentTransferType === 'Troop to Girl') {
+                        // Girls dropdown will filter automatically on focus
+                    }
+                }
+            );
+            
+            setupCombobox('fromGirl', 'fromGirlDropdown',
+                () => {
+                    const troop = document.getElementById('fromTroop').value;
+                    return girls
+                        .filter(g => !troop || g.troop === troop)
+                        .map(g => ({ value: g.name, label: g.name, email: g.email }));
+                },
+                (value, email) => {
+                    if (email) document.getElementById('fromEmail').value = email;
+                }
+            );
+            
+            setupCombobox('toTroop', 'toTroopDropdown',
+                () => troops.map(t => ({ value: t.number, label: `${t.number}${t.name ? ' - ' + t.name : ''}`, email: t.email })),
+                (value, email) => {
+                    if (email) document.getElementById('toEmail').value = email;
+                }
+            );
+            
+            setupCombobox('toGirl', 'toGirlDropdown',
+                () => {
+                    const troop = document.getElementById('fromTroop').value || document.getElementById('toTroop').value;
+                    return girls
+                        .filter(g => !troop || g.troop === troop)
+                        .map(g => ({ value: g.name, label: g.name, email: g.email }));
+                },
+                (value, email) => {
+                    if (email) document.getElementById('toEmail').value = email;
+                }
+            );
+
+            // Signature preview
+            document.getElementById('signatureName').addEventListener('input', function() {
+                document.getElementById('signaturePreview').textContent = this.value || 'Signature Preview';
+            });
+
+            // Cookie totals
+            document.querySelectorAll('.cookie-row input').forEach(input => {
+                input.addEventListener('input', calculateTotals);
+            });
+
+            // Form submission
+            document.getElementById('transferForm').addEventListener('submit', handleSubmit);
         }
 
-        // Add event listeners to all inputs
-        document.querySelectorAll('.cookie-row input').forEach(input => {
-            input.addEventListener('input', calculateTotals);
-        });
+        function updateFormForTransferType() {
+            const fromTroopRow = document.getElementById('fromTroopRow');
+            const fromGirlRow = document.getElementById('fromGirlRow');
+            const toTroopRow = document.getElementById('toTroopRow');
+            const toGirlRow = document.getElementById('toGirlRow');
 
-        // Toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast ' + type + ' show';
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            // Hide all first
+            fromTroopRow.classList.add('hidden');
+            fromGirlRow.classList.add('hidden');
+            toTroopRow.classList.add('hidden');
+            toGirlRow.classList.add('hidden');
+
+            // Reset required
+            document.getElementById('fromTroop').required = false;
+            document.getElementById('fromGirl').required = false;
+            document.getElementById('toTroop').required = false;
+            document.getElementById('toGirl').required = false;
+
+            switch (currentTransferType) {
+                case 'Troop to Girl':
+                    fromTroopRow.classList.remove('hidden');
+                    toGirlRow.classList.remove('hidden');
+                    document.getElementById('fromTroop').required = true;
+                    document.getElementById('toGirl').required = true;
+                    break;
+                case 'Girl to Troop':
+                    fromTroopRow.classList.remove('hidden');
+                    fromGirlRow.classList.remove('hidden');
+                    toTroopRow.classList.remove('hidden');
+                    document.getElementById('fromTroop').required = true;
+                    document.getElementById('fromGirl').required = true;
+                    document.getElementById('toTroop').required = true;
+                    break;
+                case 'Troop to Troop':
+                    fromTroopRow.classList.remove('hidden');
+                    toTroopRow.classList.remove('hidden');
+                    document.getElementById('fromTroop').required = true;
+                    document.getElementById('toTroop').required = true;
+                    break;
+                case 'Girl to Girl':
+                    fromTroopRow.classList.remove('hidden');
+                    fromGirlRow.classList.remove('hidden');
+                    toTroopRow.classList.remove('hidden');
+                    toGirlRow.classList.remove('hidden');
+                    document.getElementById('fromTroop').required = true;
+                    document.getElementById('fromGirl').required = true;
+                    document.getElementById('toTroop').required = true;
+                    document.getElementById('toGirl').required = true;
+                    break;
+            }
         }
 
-        // Collect form data
+        function calculateTotals() {
+            let total = 0;
+            document.querySelectorAll('.cookie-row[data-cookie] input').forEach(input => {
+                total += parseInt(input.value) || 0;
+            });
+            document.getElementById('totalPkgs').textContent = total;
+        }
+
+        // ============================================
+        // FORM SUBMISSION
+        // ============================================
         function collectFormData() {
-            const cookieData = {};
+            const cookies = {};
             document.querySelectorAll('.cookie-row[data-cookie]').forEach(row => {
-                const cookie = row.dataset.cookie;
-                cookieData[cookie] = {
-                    cases: parseInt(row.querySelector('.cases').value) || 0,
-                    pkgs: parseInt(row.querySelector('.pkgs').value) || 0
-                };
+                cookies[row.dataset.cookie] = parseInt(row.querySelector('.pkgs').value) || 0;
             });
 
             return {
+                sheetId: sheetId,
                 timestamp: new Date().toISOString(),
-                troopName: document.getElementById('troopName').value,
-                date: document.getElementById('transferDate').value,
-                serviceUnit: document.getElementById('serviceUnit').value,
-                fromName: document.getElementById('fromName').value,
+                transferType: currentTransferType,
                 fromTroop: document.getElementById('fromTroop').value,
-                toName: document.getElementById('toName').value,
-                toTroop: document.getElementById('toTroop').value,
-                cookies: cookieData,
-                totalCases: parseInt(document.getElementById('totalCases').textContent),
-                totalPkgs: parseInt(document.getElementById('totalPkgs').textContent),
-                moneyAmount: parseFloat(document.getElementById('moneyAmount').value) || 0,
-                sendEmail: document.getElementById('emailToggle').checked,
+                fromGirl: document.getElementById('fromGirl').value,
                 fromEmail: document.getElementById('fromEmail').value,
+                toTroop: document.getElementById('toTroop').value || document.getElementById('fromTroop').value,
+                toGirl: document.getElementById('toGirl').value,
                 toEmail: document.getElementById('toEmail').value,
+                cookies: cookies,
+                totalPackages: parseInt(document.getElementById('totalPkgs').textContent),
+                moneyAmount: parseFloat(document.getElementById('moneyAmount').value) || 0,
+                signature: document.getElementById('signatureName').value,
+                signatureTimestamp: new Date().toLocaleString(),
                 notes: document.getElementById('notes').value
             };
         }
 
-        // Form submission
-        document.getElementById('transferForm').addEventListener('submit', async function(e) {
+        async function handleSubmit(e) {
             e.preventDefault();
-            
+
+            if (!document.getElementById('signatureConsent').checked) {
+                showToast('Recipient must check the signature box', 'error');
+                return;
+            }
+
+            if (!document.getElementById('signatureName').value.trim()) {
+                showToast('Recipient must sign', 'error');
+                return;
+            }
+
             const submitBtn = document.querySelector('.submit-btn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
@@ -665,53 +1361,68 @@
             const data = collectFormData();
 
             try {
-                // Check if Google Script URL is configured
-                if (CONFIG.GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-                    // Demo mode - just show success
-                    console.log('Form data:', data);
-                    showToast('Demo: Data logged to console', 'success');
-                    
-                    // Clear form for next entry
-                    document.querySelectorAll('.cookie-row input').forEach(input => {
-                        input.value = '';
-                    });
-                    document.getElementById('moneyAmount').value = '';
-                    document.getElementById('notes').value = '';
-                    calculateTotals();
+                if (CONFIG.SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                    console.log('Demo mode - Form data:', data);
+                    showToast('Demo: See console', 'success');
                 } else {
-                    // Send to Google Apps Script
-                    const response = await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
+                    await fetch(CONFIG.SCRIPT_URL, {
                         method: 'POST',
                         mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data)
                     });
-
                     showToast('Transfer recorded!', 'success');
                     
-                    // Clear form for next entry
-                    document.querySelectorAll('.cookie-row input').forEach(input => {
-                        input.value = '';
-                    });
-                    document.getElementById('moneyAmount').value = '';
-                    document.getElementById('notes').value = '';
-                    calculateTotals();
+                    // Refresh roster to get any new entries
+                    loadRoster();
                 }
+
+                // Reset form
+                document.querySelectorAll('.cookie-row input').forEach(i => i.value = '');
+                document.getElementById('moneyAmount').value = '';
+                document.getElementById('notes').value = '';
+                document.getElementById('signatureName').value = '';
+                document.getElementById('signatureConsent').checked = false;
+                document.getElementById('signaturePreview').textContent = 'Signature Preview';
+                document.getElementById('fromGirl').value = '';
+                document.getElementById('toGirl').value = '';
+                document.getElementById('fromEmail').value = '';
+                document.getElementById('toEmail').value = '';
+                calculateTotals();
+
             } catch (error) {
-                console.error('Error:', error);
-                showToast('Error submitting. Try again.', 'error');
+                console.error('Submit error:', error);
+                showToast('Error. Please try again.', 'error');
             }
 
             submitBtn.disabled = false;
             submitBtn.textContent = 'Submit Transfer';
-        });
+        }
 
-        // Prevent zoom on input focus (iOS)
-        document.querySelectorAll('input, select').forEach(el => {
-            el.addEventListener('focus', function() {
-                this.style.fontSize = '16px';
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function showHelp() {
+            document.getElementById('helpModal').classList.add('show');
+        }
+
+        function hideHelp() {
+            document.getElementById('helpModal').classList.remove('show');
+        }
+
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('show');
+                }
             });
         });
     </script>
