@@ -268,12 +268,16 @@
 
         .cookie-row {
             display: grid;
-            grid-template-columns: 1fr 80px;
+            grid-template-columns: 1fr 70px 70px;
             gap: 8px;
             align-items: center;
             padding: 8px 12px;
             background: var(--bg-main);
             border-radius: 8px;
+        }
+
+        .cookie-row.three-col {
+            grid-template-columns: 1fr 70px 70px;
         }
 
         .cookie-row.header {
@@ -292,7 +296,7 @@
         }
 
         .cookie-name {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
         }
 
@@ -314,7 +318,7 @@
 
         .cookie-row.total .total-value {
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--gs-green-dark);
         }
 
@@ -761,63 +765,74 @@
 
                 <!-- Cookie Inventory -->
                 <div class="card">
-                    <div class="card-title">Cookie Packages</div>
+                    <div class="card-title">Cookies</div>
                     <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">
-                        Enter total packages (12 packages = 1 case)
+                        Enter cases (12 pkgs each) and/or individual packages
                     </p>
                     <div class="cookie-grid">
-                        <div class="cookie-row header">
+                        <div class="cookie-row header three-col">
                             <span>Variety</span>
+                            <span style="text-align:center">Cases</span>
                             <span style="text-align:center">Pkgs</span>
                         </div>
                         
-                        <div class="cookie-row" data-cookie="adventurefuls">
+                        <div class="cookie-row three-col" data-cookie="adventurefuls">
                             <span class="cookie-name">Adventurefuls</span>
-                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                            <input type="number" class="cases" min="0" value="" placeholder="" inputmode="numeric">
+                            <input type="number" class="pkgs" min="0" value="" placeholder="" inputmode="numeric">
                         </div>
                         
-                        <div class="cookie-row" data-cookie="exploremores">
+                        <div class="cookie-row three-col" data-cookie="exploremores">
                             <span class="cookie-name">Exploremores</span>
-                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                            <input type="number" class="cases" min="0" value="" placeholder="" inputmode="numeric">
+                            <input type="number" class="pkgs" min="0" value="" placeholder="" inputmode="numeric">
                         </div>
                         
-                        <div class="cookie-row" data-cookie="lemonades">
+                        <div class="cookie-row three-col" data-cookie="lemonades">
                             <span class="cookie-name">Lemonades</span>
-                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                            <input type="number" class="cases" min="0" value="" placeholder="" inputmode="numeric">
+                            <input type="number" class="pkgs" min="0" value="" placeholder="" inputmode="numeric">
                         </div>
                         
-                        <div class="cookie-row" data-cookie="trefoils">
+                        <div class="cookie-row three-col" data-cookie="trefoils">
                             <span class="cookie-name">Trefoils</span>
-                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                            <input type="number" class="cases" min="0" value="" placeholder="" inputmode="numeric">
+                            <input type="number" class="pkgs" min="0" value="" placeholder="" inputmode="numeric">
                         </div>
                         
-                        <div class="cookie-row" data-cookie="thinmints">
+                        <div class="cookie-row three-col" data-cookie="thinmints">
                             <span class="cookie-name">Thin Mints</span>
-                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                            <input type="number" class="cases" min="0" value="" placeholder="" inputmode="numeric">
+                            <input type="number" class="pkgs" min="0" value="" placeholder="" inputmode="numeric">
                         </div>
                         
-                        <div class="cookie-row" data-cookie="pbpatties">
+                        <div class="cookie-row three-col" data-cookie="pbpatties">
                             <span class="cookie-name">PB Patties</span>
-                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                            <input type="number" class="cases" min="0" value="" placeholder="" inputmode="numeric">
+                            <input type="number" class="pkgs" min="0" value="" placeholder="" inputmode="numeric">
                         </div>
                         
-                        <div class="cookie-row" data-cookie="carameldelites">
+                        <div class="cookie-row three-col" data-cookie="carameldelites">
                             <span class="cookie-name">Caramel deLites</span>
-                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                            <input type="number" class="cases" min="0" value="" placeholder="" inputmode="numeric">
+                            <input type="number" class="pkgs" min="0" value="" placeholder="" inputmode="numeric">
                         </div>
                         
-                        <div class="cookie-row" data-cookie="pbsandwich">
+                        <div class="cookie-row three-col" data-cookie="pbsandwich">
                             <span class="cookie-name">PB Sandwich</span>
-                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                            <input type="number" class="cases" min="0" value="" placeholder="" inputmode="numeric">
+                            <input type="number" class="pkgs" min="0" value="" placeholder="" inputmode="numeric">
                         </div>
                         
-                        <div class="cookie-row" data-cookie="caramelchip">
+                        <div class="cookie-row three-col" data-cookie="caramelchip">
                             <span class="cookie-name">Caramel Chip GF</span>
-                            <input type="number" class="pkgs" min="0" placeholder="0" inputmode="numeric">
+                            <input type="number" class="cases" min="0" value="" placeholder="" inputmode="numeric">
+                            <input type="number" class="pkgs" min="0" value="" placeholder="" inputmode="numeric">
                         </div>
                         
-                        <div class="cookie-row total">
+                        <div class="cookie-row total three-col">
                             <span class="cookie-name">TOTAL</span>
+                            <span class="total-value" id="totalCases">0</span>
                             <span class="total-value" id="totalPkgs">0</span>
                         </div>
                     </div>
@@ -954,10 +969,10 @@
         // ============================================
         const CONFIG = {
             // Google Apps Script Web App URL (hosted by you)
-            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyrmFfJflLcGuaHtpLeC9WomxngKM6Obai1kqBnODTAJlvEqRvOEbYQUxBKeKdjZOOq/exec',
+            SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
             
             // Email for sharing instructions
-            SHARE_EMAIL: 'terrel.culp@gmail.com'
+            SHARE_EMAIL: 'terrel@riojas.io'
         };
 
         // ============================================
@@ -1306,11 +1321,14 @@
         }
 
         function calculateTotals() {
-            let total = 0;
-            document.querySelectorAll('.cookie-row[data-cookie] input').forEach(input => {
-                total += parseInt(input.value) || 0;
+            let totalCases = 0;
+            let totalPkgs = 0;
+            document.querySelectorAll('.cookie-row[data-cookie]').forEach(row => {
+                totalCases += parseInt(row.querySelector('.cases').value) || 0;
+                totalPkgs += parseInt(row.querySelector('.pkgs').value) || 0;
             });
-            document.getElementById('totalPkgs').textContent = total;
+            document.getElementById('totalCases').textContent = totalCases;
+            document.getElementById('totalPkgs').textContent = totalPkgs;
         }
 
         // ============================================
@@ -1319,7 +1337,11 @@
         function collectFormData() {
             const cookies = {};
             document.querySelectorAll('.cookie-row[data-cookie]').forEach(row => {
-                cookies[row.dataset.cookie] = parseInt(row.querySelector('.pkgs').value) || 0;
+                const cookieType = row.dataset.cookie;
+                cookies[cookieType] = {
+                    cases: parseInt(row.querySelector('.cases').value) || 0,
+                    pkgs: parseInt(row.querySelector('.pkgs').value) || 0
+                };
             });
 
             return {
@@ -1333,6 +1355,7 @@
                 toGirl: document.getElementById('toGirl').value,
                 toEmail: document.getElementById('toEmail').value,
                 cookies: cookies,
+                totalCases: parseInt(document.getElementById('totalCases').textContent),
                 totalPackages: parseInt(document.getElementById('totalPkgs').textContent),
                 moneyAmount: parseFloat(document.getElementById('moneyAmount').value) || 0,
                 signature: document.getElementById('signatureName').value,
@@ -1378,7 +1401,7 @@
                 }
 
                 // Reset form
-                document.querySelectorAll('.cookie-row input').forEach(i => i.value = '');
+                document.querySelectorAll('.cookie-row[data-cookie] input').forEach(i => i.value = '');
                 document.getElementById('moneyAmount').value = '';
                 document.getElementById('notes').value = '';
                 document.getElementById('signatureName').value = '';
